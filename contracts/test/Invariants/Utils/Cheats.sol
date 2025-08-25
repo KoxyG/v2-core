@@ -1,3 +1,6 @@
+pragma solidity =0.5.16;
+pragma experimental ABIEncoderV2;
+
 interface StdCheats {
     // Set block.timestamp
     function warp(uint256) external;
@@ -66,10 +69,10 @@ interface StdCheats {
     function toString(int256) external returns (string memory);
 
     // Convert strings into Solidity types
-    function parseBytes(string memory) external returns (bytes memory);
-    function parseBytes32(string memory) external returns (bytes32);
-    function parseAddress(string memory) external returns (address);
-    function parseUint(string memory) external returns (uint256);
-    function parseInt(string memory) external returns (int256);
-    function parseBool(string memory) external returns (bool);
+    function parseBytes(string calldata) external returns (bytes memory);
+    function parseBytes32(string calldata) external returns (bytes32);
+    function parseAddress(string calldata) external returns (address);
+    function parseUint(string calldata) external returns (uint256);
+    function parseInt(string calldata) external returns (int256);
+    function parseBool(string calldata) external returns (bool);
 }

@@ -15,7 +15,7 @@
 		],
 		"revertReporterEnabled": false,
 		"targetContracts": [
-			"SavingsInv"
+			"UniswapV2Inv"
 		],
 		"predeployedContracts": {},
 		"targetContractsBalances": [],

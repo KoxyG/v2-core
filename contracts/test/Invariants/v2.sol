@@ -1,5 +1,4 @@
 // SPDX-License-Identifier: MIT
-
 pragma solidity =0.5.16;
 
 import {UniswapV2Pair} from "../../UniswapV2Pair.sol";
@@ -20,6 +19,11 @@ contract UniswapV2Inv {
         token0 = new ERC20(1000000 * 10**18);
         token1 = new ERC20(1000000 * 10**18);
         pair = UniswapV2Pair(factory.createPair(address(token0), address(token1)));
+        
+        // Add initial liquidity to the pair
+        token0.transfer(address(pair), 1000 * 10**18);
+        token1.transfer(address(pair), 1000 * 10**18);
+        pair.mint(address(this));
     }
 
     // INV 1 - Total supply should always be positive
