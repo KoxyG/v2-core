@@ -81,10 +81,10 @@
 			}
 		}
 	},
-	"compilation": {
+	  "compilation": {
     "platform": "crytic-compile",
     "platformConfig": {
-      "target": ".",
+      "target": "contracts/test/Invariants/v2.sol",
       "solcVersion": "",
       "exportDirectory": "",
       "args": ["--foundry-compile-all"]

@@ -1,0 +1,62 @@
+# Uniswap V2 Core Invariants
+
+## Constant Product Formula (x * y = k) - ✅ TESTED
+- The fundamental invariant: reserve0 * reserve1 = k (constant)
+- After any swap: (reserve0 + amount0In - amount0Out) * (reserve1 + amount1In - amount1Out) >= k
+- The K invariant is enforced in the swap function: balance0Adjusted * balance1Adjusted >= reserve0 * reserve1 * 1000^2
+
+### Invariant Tests For  Constant Product Formula Implemented:
+1. `testConstantProduct()` - ✅ Verifies K > 0
+2. `testKInvariantAfterSwap()` - ✅ Verifies K preservation after simulated swaps
+3. `testKInvariantWithFees()` - ✅ Verifies K preservation with fee mechanism
+4. `testGetAmountsOutAccuracy()` - ✅ Verifies getAmountsOut returns accurate amounts
+5. `testGetAmountsOutDiscrepancy()` - ✅ Detects "way less than expected" amounts
+6. `testGetAmountsOutBugScenario()` - ✅ Simulates realistic bug scenarios
+7. `testGetAmountsOutEdgeCases()` - ✅ Tests edge cases that could cause discrepancies
+
+
+## Liquidity Provision Invariants - ✅ TESTED
+- Total supply must always be positive: totalSupply > 0
+- Minimum liquidity is permanently locked: MINIMUM_LIQUIDITY = 10^3 tokens
+- Liquidity minting: liquidity = min(amount0 * totalSupply / reserve0, amount1 * totalSupply / reserve1)
+- Liquidity burning: amount0 = liquidity * balance0 / totalSupply, amount1 = liquidity * balance1 / totalSupply
+
+### Invariant Tests For Liquidity Implemented:
+8. `testTotalSupplyPositiveInvariant()` - ✅ Verifies totalSupply > 0 and >= MINIMUM_LIQUIDITY
+9. `testMinimumLiquidityLocked()` - ✅ Verifies minimum liquidity is always locked
+10. `testLiquidityMintingFormula()` - ✅ Validates liquidity minting formula
+11. `testLiquidityBurningFormula()` - ✅ Validates liquidity burning formula
+12. `testLiquidityProvisionKInvariant()` - ✅ Verifies K increases when adding liquidity
+13. `testLiquidityRemovalKInvariant()` - ✅ Verifies K decreases when removing liquidity
+
+
+## Security Invariants - ✅ TESTED
+- Lock mechanism prevents reentrancy: unlocked == 1 before and after operations
+- Factory ownership: only factory can initialize pairs
+- Token ordering: token0 < token1 (deterministic ordering)
+- No self-swaps: to != token0 && to != token1
+
+### Invariant Tests For Security Implemented:
+21. `testLockMechanism()` - ✅ Verifies lock mechanism prevents reentrancy
+22. `testFactoryOwnership()` - ✅ Validates factory ownership of pairs
+23. `testTokenOrdering()` - ✅ Ensures deterministic token ordering (token0 < token1)
+24. `testNoSelfSwaps()` - ✅ Prevents self-swaps (to != token0 && to != token1)
+25. `testReentrancyProtection()` - ✅ Verifies reentrancy protection state consistency
+26. `testAuthorizationInvariant()` - ✅ Validates authorization for critical operations
+27. `testStateConsistency()` - ✅ Ensures state consistency across operations
+28. `testAccessControl()` - ✅ Verifies proper access control mechanisms
+
+## Fee Mechanism - ✅ TESTED
+- Protocol fee: 0.3% fee on swaps (3/1000)
+- Fee calculation: balance0Adjusted = balance0 * 1000 - amount0In * 3
+- Fee collection: kLast tracks k value for fee calculation
+- Fee minting: liquidity = totalSupply * (rootK - rootKLast) / (rootK * 5 + rootKLast)
+
+### Invariant Tests For Fee  Implemented:
+14. `testProtocolFeeRate()` - ✅ Verifies 0.3% fee rate (3/1000)
+15. `testFeeCalculationFormula()` - ✅ Validates fee calculation formula
+16. `testKInvariantWithFeeEnforcement()` - ✅ Verifies K invariant with fee enforcement
+17. `testFeeCollectionTracking()` - ✅ Validates kLast tracking for fee collection
+18. `testFeeMintingFormula()` - ✅ Validates fee minting formula
+19. `testFeeMechanismPreservesK()` - ✅ Verifies fee mechanism preserves K invariant
+20. `testFeeCalculationEdgeCases()` - ✅ Tests fee calculation edge cases
